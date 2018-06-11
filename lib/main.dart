@@ -60,10 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String _fromMoney = '0';
   String _toMoney = '0';
 
-  void _incrementCounter() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -76,6 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Column(
           children: <Widget>[
             _cardInfo('from', _fromCurrency, 1),
+            new Container(
+              height: 60.0,
+              color: Colors.black54,
+              child: new Center(
+                  child: new CircleAvatar(
+                      child: new IconButton(
+                          icon: new Icon(Icons.repeat),
+                          onPressed: () => _swap()), backgroundColor: Colors.black38,
+                  )),
+            ),
             _cardInfo('to', _toCurrency, 2),
             new Expanded(
               child: _calc(),
@@ -86,16 +92,33 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _cardInfo(String from_to, String name, int type) {
+  _swap() {
+    debugPrint('voa dya');
+    setState(() {
+      String tmp = _fromCurrency;
+      _fromCurrency = _toCurrency;
+      _toCurrency = tmp;
+
+      tmp = _fromMoney;
+      _fromMoney = _toMoney;
+      _toMoney = tmp;
+    });
+  }
+
+  Widget _cardInfo(String fromTo, String name, int type) {
     return new Container(
       padding: new EdgeInsets.all(15.0),
-      height: 150.0,
+      height: 120.0,
       width: MediaQuery.of(context).size.width,
-      color: Colors.greenAccent,
+      color: Colors.black54,
       child: new Container(
         alignment: Alignment.centerLeft,
         child: new Row(
           children: <Widget>[
+            new CircleAvatar(
+              child: new Text(name),
+              backgroundColor: Colors.black26,
+            ),
             new Expanded(
               child: new FlatButton(
                 onPressed: () => _listItemScreen(context, type),
@@ -104,19 +127,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     new Text(
-                      from_to,
+                      fromTo,
                       style: new TextStyle(
-                          fontStyle: FontStyle.italic, color: Colors.white70),
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white70,
+                          fontSize: 20.0),
                     ),
                     new Text(
-                      name,
-                      style: new TextStyle(color: Colors.white70),
+                      listCurrency[name][0],
+                      style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                          fontSize: 24.0),
                     )
                   ],
                 ),
               ),
             ),
-            new Text(type == 1 ? _fromMoney : _toMoney)
+            new Text(type == 1 ? _fromMoney : _toMoney, style: new TextStyle(fontSize: 20.0, color: Colors.white70),)
           ],
         ),
       ),
@@ -211,6 +239,8 @@ class _MyHomePageState extends State<MyHomePage> {
           if (len == 1 && _fromMoney[0] == '0') return;
           _fromMoney += '00';
           break;
+        case '=':
+          break;
         default:
           if (len == 1 && _fromMoney[0] == '0')
             _fromMoney = character;
@@ -221,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _toMoney = ((double.parse(_fromMoney) *
                   double.parse(listCurrency[_fromCurrency][1])) /
               double.parse(listCurrency[_toCurrency][1]))
-          .toString();
+          .toStringAsFixed(3);
     });
   }
 
@@ -233,6 +263,9 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context) =>
                 new ListItemScreen(listSymbol, listCurrency)));
 
+    print(result);
+    if (result == null)
+      return;
     String sym = result.toString();
     setState(() {
       switch (type) {

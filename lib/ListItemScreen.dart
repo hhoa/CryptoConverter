@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ListItemScreen extends StatelessWidget {
-  Map<String, List<String>> listCurrency;
-  List<String> listSymbol;
+  final Map<String, List<String>> listCurrency;
+  final List<String> listSymbol;
 
   ListItemScreen(this.listSymbol, this.listCurrency);
 
