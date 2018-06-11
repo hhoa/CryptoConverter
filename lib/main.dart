@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: new MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -65,21 +66,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Currency Converter'),
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.black26,
       ),
-      backgroundColor: Colors.blueGrey,
       body: new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(image: new AssetImage('assets/images/samara1.jpg'), fit: BoxFit.fill)
+        ),
         child: new Column(
           children: <Widget>[
             _cardInfo('from', _fromCurrency, 1),
             new Container(
               height: 60.0,
-              color: Colors.black54,
               child: new Center(
                   child: new CircleAvatar(
-                      child: new IconButton(
-                          icon: new Icon(Icons.repeat),
-                          onPressed: () => _swap()), backgroundColor: Colors.black38,
+                    child: new IconButton(
+                        icon: new Icon(Icons.repeat),
+                        onPressed: () => _swap()), backgroundColor: Colors.black38,
                   )),
             ),
             _cardInfo('to', _toCurrency, 2),
@@ -93,7 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _swap() {
-    debugPrint('voa dya');
     setState(() {
       String tmp = _fromCurrency;
       _fromCurrency = _toCurrency;
@@ -110,7 +111,6 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: new EdgeInsets.all(15.0),
       height: 120.0,
       width: MediaQuery.of(context).size.width,
-      color: Colors.black54,
       child: new Container(
         alignment: Alignment.centerLeft,
         child: new Row(
@@ -249,8 +249,8 @@ class _MyHomePageState extends State<MyHomePage> {
       }
 
       _toMoney = ((double.parse(_fromMoney) *
-                  double.parse(listCurrency[_fromCurrency][1])) /
-              double.parse(listCurrency[_toCurrency][1]))
+          double.parse(listCurrency[_fromCurrency][1])) /
+          double.parse(listCurrency[_toCurrency][1]))
           .toStringAsFixed(3);
     });
   }
@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context,
         new MaterialPageRoute(
             builder: (context) =>
-                new ListItemScreen(listSymbol, listCurrency)));
+            new ListItemScreen(listSymbol, listCurrency)));
 
     print(result);
     if (result == null)
